@@ -7,9 +7,29 @@
 //
 
 #import <UIKit/UIKit.h>
+@interface ViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+{
+    UIDatePicker *datepicker;
+    NSString *date;
+    UIImagePickerController *imagePicker;
+    NSUserDefaults *userDefault;
+    
+}
+- (IBAction)click:(id)sender;
+- (IBAction)time:(id)sender;
+@property (nonatomic) UIButton *btn;
 
-@interface ViewController : UIViewController
-
-
+@property (weak, nonatomic) IBOutlet UILabel *time;
+@property (nonatomic)UIView *oview;
+@property (strong, nonatomic) IBOutlet UIView *CamerOview;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *TimeButLebel;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *CamerButLabel;
+@property (weak, nonatomic) IBOutlet UIButton *CameraBut;
+- (void)addCameraView;
+- (IBAction)TakePic:(id)sender;
+@property (weak, nonatomic) IBOutlet UIDatePicker *DatePicker;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolBar;
+@property (weak, nonatomic) IBOutlet UIView *camerView;
+@property (nonatomic) UIImagePickerController *imagePickerController;
 @end
 
