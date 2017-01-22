@@ -17,7 +17,7 @@
 		4A7106101BECA14B00DCCF26 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A71060E1BECA14B00DCCF26 /* LaunchScreen.storyboard */; };
 		4A71061B1BECA14C00DCCF26 /* CameraDateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A71061A1BECA14C00DCCF26 /* CameraDateTests.m */; };
 		4A7106261BECA14C00DCCF26 /* CameraDateUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A7106251BECA14C00DCCF26 /* CameraDateUITests.m */; };
-		E97FE94F69C5214F106E9230 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5C1FB5792201315668A2404 /* libPods.a */; };
+		4AA07FAC6BCBCC859BA58AB4 /* libPods-CameraDate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB9AD7FC41359D7C716AE1F /* libPods-CameraDate.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +38,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		416B1A28A39472FDAAA3195E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		4A14F9401BECD03800BB6BF4 /* OverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OverlayView.xib; sourceTree = "<group>"; };
 		4A14F9421BECD04C00BB6BF4 /* camerBut.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = camerBut.png; path = ../camerBut.png; sourceTree = "<group>"; };
 		4A7105FD1BECA14B00DCCF26 /* CameraDate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CameraDate.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,8 +56,9 @@
 		4A7106211BECA14C00DCCF26 /* CameraDateUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CameraDateUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A7106251BECA14C00DCCF26 /* CameraDateUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraDateUITests.m; sourceTree = "<group>"; };
 		4A7106271BECA14C00DCCF26 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F5C1FB5792201315668A2404 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		FA6654D23B5CF20D4D74B5DD /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		A6651258708B352035FD0D5F /* Pods-CameraDate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CameraDate.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CameraDate/Pods-CameraDate.debug.xcconfig"; sourceTree = "<group>"; };
+		EC9926AD5EF2D995BA98D4EA /* Pods-CameraDate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CameraDate.release.xcconfig"; path = "Pods/Target Support Files/Pods-CameraDate/Pods-CameraDate.release.xcconfig"; sourceTree = "<group>"; };
+		FEB9AD7FC41359D7C716AE1F /* libPods-CameraDate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CameraDate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E97FE94F69C5214F106E9230 /* libPods.a in Frameworks */,
+				4AA07FAC6BCBCC859BA58AB4 /* libPods-CameraDate.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,15 +87,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2CF047C504A4C5E5BE164886 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				FA6654D23B5CF20D4D74B5DD /* Pods.debug.xcconfig */,
-				416B1A28A39472FDAAA3195E /* Pods.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		4A7105F41BECA14B00DCCF26 = {
 			isa = PBXGroup;
 			children = (
@@ -103,8 +94,8 @@
 				4A7106191BECA14C00DCCF26 /* CameraDateTests */,
 				4A7106241BECA14C00DCCF26 /* CameraDateUITests */,
 				4A7105FE1BECA14B00DCCF26 /* Products */,
-				2CF047C504A4C5E5BE164886 /* Pods */,
-				72F554705324849F641AA354 /* Frameworks */,
+				EDDD107AFFD5F7592E6BF8D1 /* Pods */,
+				FC00CD6F451D3D76D67551E4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -162,10 +153,19 @@
 			path = CameraDateUITests;
 			sourceTree = "<group>";
 		};
-		72F554705324849F641AA354 /* Frameworks */ = {
+		EDDD107AFFD5F7592E6BF8D1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				F5C1FB5792201315668A2404 /* libPods.a */,
+				A6651258708B352035FD0D5F /* Pods-CameraDate.debug.xcconfig */,
+				EC9926AD5EF2D995BA98D4EA /* Pods-CameraDate.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		FC00CD6F451D3D76D67551E4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FEB9AD7FC41359D7C716AE1F /* libPods-CameraDate.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -177,13 +177,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4A71062A1BECA14C00DCCF26 /* Build configuration list for PBXNativeTarget "CameraDate" */;
 			buildPhases = (
-				D049BDF995268BA29F886A0D /* Check Pods Manifest.lock */,
+				EABDE100CABAC6A00B8EE8A7 /* [CP] Check Pods Manifest.lock */,
 				4A7105F91BECA14B00DCCF26 /* Sources */,
 				4A7105FA1BECA14B00DCCF26 /* Frameworks */,
 				4A7105FB1BECA14B00DCCF26 /* Resources */,
-				713329F31A8A04560266544F /* Embed Pods Frameworks */,
-				4715819CAE9A929F7008EF8F /* Copy Pods Resources */,
 				4A2875351BECEBD20068EA42 /* ShellScript */,
+				42932F4EE0156C3302F2DD33 /* [CP] Embed Pods Frameworks */,
+				FD1EF98316D0D39EE98A7092 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -241,6 +241,7 @@
 				TargetAttributes = {
 					4A7105FC1BECA14B00DCCF26 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = U6W89DX2B6;
 					};
 					4A7106151BECA14C00DCCF26 = {
 						CreatedOnToolsVersion = 7.1;
@@ -302,19 +303,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4715819CAE9A929F7008EF8F /* Copy Pods Resources */ = {
+		42932F4EE0156C3302F2DD33 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CameraDate/Pods-CameraDate-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4A2875351BECEBD20068EA42 /* ShellScript */ = {
@@ -330,34 +331,34 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/Fabric.framework/run\" 8777169fb802a63a7e812d297cfea4abfadd3698 8b8e1daf2e69e8bdbe23684a79a5f3ca99a45ab3609e23f09be8306c94a41e8e";
 		};
-		713329F31A8A04560266544F /* Embed Pods Frameworks */ = {
+		EABDE100CABAC6A00B8EE8A7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		D049BDF995268BA29F886A0D /* Check Pods Manifest.lock */ = {
+		FD1EF98316D0D39EE98A7092 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CameraDate/Pods-CameraDate-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -508,9 +509,10 @@
 		};
 		4A71062B1BECA14C00DCCF26 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FA6654D23B5CF20D4D74B5DD /* Pods.debug.xcconfig */;
+			baseConfigurationReference = A6651258708B352035FD0D5F /* Pods-CameraDate.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = U6W89DX2B6;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = CameraDate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -521,9 +523,10 @@
 		};
 		4A71062C1BECA14C00DCCF26 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 416B1A28A39472FDAAA3195E /* Pods.release.xcconfig */;
+			baseConfigurationReference = EC9926AD5EF2D995BA98D4EA /* Pods-CameraDate.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = U6W89DX2B6;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = CameraDate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

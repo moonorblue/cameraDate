@@ -109,6 +109,18 @@ NSInteger count;
     
 }
 
+
+- (void)restClient:(DBRestClient*)client uploadProgress:(CGFloat)progress
+           forFile:(NSString*)destPath from:(NSString*)srcPath {
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        NSLog(@"p:%f",progress);
+        hud.progress = progress;
+    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+////    NSLog(@"%.2f",progress);
+//        hud.progress = progress;
+//    });
+}
 - (void)Camerainit {
     
     imagePicker = [[UIImagePickerController alloc] init];
@@ -130,6 +142,7 @@ NSInteger count;
     [self presentViewController:self.imagePickerController animated:NO completion:nil];
     [self datePickInit];
     hud = [[MBProgressHUD alloc]initWithView:self.imagePickerController.view];
+     hud.mode = MBProgressHUDModeDeterminateHorizontalBar;
     [self.imagePickerController.view addSubview:hud];
     [self checkFails];
 }
