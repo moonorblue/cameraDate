@@ -133,7 +133,7 @@ NSInteger count;
     [[NSBundle mainBundle] loadNibNamed:@"OverlayView" owner:self options:nil];
     
     self.CamerOview.frame = imagePicker.cameraOverlayView.frame;
-    
+
     imagePicker.cameraOverlayView = self.CamerOview;
     
     self.CamerOview = nil;
@@ -265,7 +265,7 @@ NSInteger count;
     //    self.DatePicker.frame = CGRectMake(0, 425, 260, 200);
     
     //oneDatePicker.frame = CGRectMake(0, 20, 320, 300); // 设置显示的位置和大小
-    
+    //[self.DatePicker setValue:[UIColor whiteColor] forKey:@"textColor"];
     self.DatePicker.date = [NSDate date]; // 设置初始时间
     self.DatePicker.timeZone = [NSTimeZone timeZoneWithName:@"GTM+8"]; // 设置时区，中国在东八区
     self.DatePicker.datePickerMode = UIDatePickerModeDate; // 设置样式
