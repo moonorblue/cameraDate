@@ -157,7 +157,7 @@ NSInteger count;
         //portrait
         img = [ViewController drawText:date
                                inImage:image
-                               atPoint:CGPointMake(1600, 2900)];
+                               atPoint:CGPointMake(image.size.width * 0.65, image.size.height * 0.9)];
         
         newSize.width = 600;
         newSize.height = 800;
@@ -167,7 +167,7 @@ NSInteger count;
         //landscape
         img = [ViewController drawText:date
                                inImage:image
-                               atPoint:CGPointMake(2300, 2200)];
+                               atPoint:CGPointMake(image.size.width * 0.75, image.size.height * 0.9)];
         newSize.width = 800;
         newSize.height = 600;
     }
