@@ -26,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *CamerButLabel;
 @property (weak, nonatomic) IBOutlet UIButton *CameraBut;
 - (void)addCameraView;
+- (void)Camerainit;
 - (IBAction)TakePic:(id)sender;
 @property (weak, nonatomic) IBOutlet UIDatePicker *DatePicker;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolBar;

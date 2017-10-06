@@ -1,6 +1,6 @@
 platform :ios, '9.0'
 target 'CameraDate' do
- pod 'Dropbox-iOS-SDK'
+ pod 'ObjectiveDropboxOfficial'
  pod 'Fabric'
  pod 'Crashlytics'
  pod 'MBProgressHUD'

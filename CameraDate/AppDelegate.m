@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
-#import <DropboxSDK/DropboxSDK.h>
+#import <ObjectiveDropboxOfficial/ObjectiveDropboxOfficial.h>
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 
@@ -20,12 +20,10 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    DBSession *dbSession = [[DBSession alloc]
-                            initWithAppKey:@"p6pmqjt05kqa7s1"
-                            appSecret:@"hsouwec6o7nw9w5"
-                            root:kDBRootAppFolder]; // either kDBRootAppFolder or kDBRootDropbox
-    [DBSession setSharedSession:dbSession];
-//    [[DBSession sharedSession]unlinkAll];
+    
+     [DBClientsManager setupWithAppKey:@"p6pmqjt05kqa7s1"];
+    
+
     [Fabric with:@[[Crashlytics class]]];
 
     // Override point for customization after application launch.
@@ -54,21 +52,44 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+//- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url
+//  sourceApplication:(NSString *)source annotation:(id)annotation {
+//    ViewController* mainController = self.window.rootViewController;
+//    if ([[DBSession sharedSession] handleOpenURL:url]) {
+//        if ([[DBSession sharedSession] isLinked]) {
+//            NSLog(@"App linked successfully!");
+//            NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+//            [userDefault setBool:YES forKey:@"dblink"];
+//            [userDefault synchronize];
+//            [mainController.btn removeFromSuperview];
+//            // At this point you can start making API calls
+//        }
+//        return YES;
+//    }
+//    // Add whatever other url handling code your app requires here
+//    return NO;
+//}
+
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url
-  sourceApplication:(NSString *)source annotation:(id)annotation {
-    ViewController* mainController = self.window.rootViewController;
-    if ([[DBSession sharedSession] handleOpenURL:url]) {
-        if ([[DBSession sharedSession] isLinked]) {
-            NSLog(@"App linked successfully!");
-            NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    DBOAuthResult *authResult = [DBClientsManager handleRedirectURL:url];
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    if (authResult != nil) {
+        if ([authResult isSuccess]) {
+            NSLog(@"Success! User is logged into Dropbox.");
             [userDefault setBool:YES forKey:@"dblink"];
-            [userDefault synchronize];
-            [mainController.btn removeFromSuperview];
-            // At this point you can start making API calls
+            ViewController *topController = (ViewController*)[UIApplication sharedApplication].keyWindow.rootViewController;
+            [topController Camerainit];
+        } else if ([authResult isCancel]) {
+            NSLog(@"Authorization flow was manually canceled by user!");
+            [userDefault setBool:NO forKey:@"dblink"];
+        } else if ([authResult isError]) {
+            NSLog(@"Error: %@", authResult);
+            [userDefault setBool:NO forKey:@"dblink"];
         }
-        return YES;
+        [userDefault synchronize];
+        
     }
-    // Add whatever other url handling code your app requires here
     return NO;
 }
 

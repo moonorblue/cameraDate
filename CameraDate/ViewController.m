@@ -7,11 +7,11 @@
 //
 
 #import "ViewController.h"
-#import <DropboxSDK/DropboxSDK.h>
+#import <ObjectiveDropboxOfficial/ObjectiveDropboxOfficial.h>
 #import "MBProgressHUD.h"
 
-@interface ViewController ()<DBRestClientDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
-@property (nonatomic, strong) DBRestClient *restClient;
+@interface ViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@property (nonatomic, strong) DBUserClient *client;
 @end
 //UIButton *btn;
 MBProgressHUD *hud;
@@ -23,30 +23,54 @@ NSInteger lock;
 NSInteger count;
 @implementation ViewController
 @synthesize btn;
++ (UIViewController*)topMostController
+{
+    UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    
+    while (topController.presentedViewController) {
+        topController = topController.presentedViewController;
+    }
+    
+    return topController;
+}
 - (void)viewDidLoad {
     
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkFails)
                                                  name:UIApplicationWillEnterForegroundNotification object:nil];
-    self.restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
-    self.restClient.delegate = self;
+
+//    self.restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
+//    self.restClient.delegate = self;
+    
+    self.client = [DBClientsManager authorizedClient];
+    
     
     userDefault = [NSUserDefaults standardUserDefaults];
-    [userDefault setBool:YES forKey:@"dblink"];
     if([userDefault boolForKey:@"dblink"] == NO){
         NSLog(@"Not linked");
         btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         btn.frame = CGRectMake(64, 240, 200, 60);
         [btn setTitle:@"Link Dropbox" forState:UIControlStateNormal];
-        [btn addTarget:self action:@selector(checkLinked) forControlEvents:UIControlEventTouchUpInside];
+        [btn addTarget:self action:@selector(myButtonInControllerPressed) forControlEvents:UIControlEventTouchUpInside];
         btn.titleLabel.font = [UIFont boldSystemFontOfSize:30];
         [self.view addSubview:btn];
     }
     else{
         NSLog(@"Linked");
     }
-   
+
     
+}
+
+- (void)checkCamera {
+    userDefault = [NSUserDefaults standardUserDefaults];
+    if([userDefault boolForKey:@"dblink"] == NO){
+        NSLog(@"Not linked");
+    }
+    else{
+        NSLog(@"Linked");
+        [self Camerainit];
+    }
 }
 - (void)viewDidAppear:(BOOL)animated {
     userDefault = [NSUserDefaults standardUserDefaults];
@@ -63,24 +87,27 @@ NSInteger count;
     // Dispose of any resources that can be recreated.
 }
 
+
+- (void)myButtonInControllerPressed {
+    [DBClientsManager authorizeFromController:[UIApplication sharedApplication]
+                                   controller:[[self class] topMostController]
+                                      openURL:^(NSURL *url) {
+                                          [[UIApplication sharedApplication] openURL:url];
+                                      }];
+}
 - (void)checkLinked {
     userDefault = [NSUserDefaults standardUserDefaults];
     if([userDefault boolForKey:@"dblink"] == NO){
-        if (![[DBSession sharedSession] isLinked]) {
-            [[DBSession sharedSession] linkFromController:self];
-        }
-    }
-   
-}
+        [DBClientsManager authorizeFromController:[UIApplication sharedApplication]
+                                       controller:self
+                                          openURL:^(NSURL *url) {
+                                              [[UIApplication sharedApplication] openURL:url];
+                                          }];
 
-- (void)check {
-    if (![[DBSession sharedSession] isLinked]) {
-        [[DBSession sharedSession] linkFromController:self];
-        NSLog(@"not link");
     }
-    NSLog(@"linked");
 
 }
+
 
 - (void)checkFails {
     NSLog(@"Check fails");
@@ -103,24 +130,54 @@ NSInteger count;
         currentFilename = filename;
         hud.labelText = @"上傳中";
         [hud show:YES];
-        [self.restClient uploadFile:[NSString stringWithFormat:@"%@",filename] toPath:destDir withParentRev:nil fromPath:filePath];
+        NSData *myResizedData = [[NSFileManager defaultManager]contentsAtPath:filePath];
+        DBFILESWriteMode *mode = [[DBFILESWriteMode alloc] initWithOverwrite];
+        
+        [[[self.client.filesRoutes uploadData:[NSString stringWithFormat:@"%@/%@",destDir,currentFilename]
+                                         mode:mode
+                                   autorename:@(YES)
+                               clientModified:nil
+                                         mute:@(NO)
+                                    inputData:myResizedData]
+          setResponseBlock:^(DBFILESFileMetadata *result, DBFILESUploadError *routeError, DBRequestError *networkError) {
+              if (result) {
+                  NSLog(@"%@\n", result);
+                  
+                  hud.labelText = @"上傳成功！";
+                  [hud hide:YES afterDelay:1];
+                  [waitFile removeObject:result.name];
+                  count += 1;
+                  if (count == lock) {
+                      userDefault = [NSUserDefaults standardUserDefaults];
+                      [userDefault setObject:waitFile forKey:@"waitFiles"];
+                      [userDefault synchronize];
+                  }
+                  
+                  self.CameraBut.enabled = YES;
+                  [self datePickInit];
+                  
+              } else {
+                  NSLog(@"%@\n%@\n", routeError, networkError);
+                  
+                  hud.labelText = @"上傳失敗！";
+                  [hud hide:YES afterDelay:2];
+                  
+                  userDefault = [NSUserDefaults standardUserDefaults];
+                  [userDefault setObject:waitFile forKey:@"waitFiles"];
+                  [userDefault synchronize];
+                  self.CameraBut.enabled = YES;
+                  [self datePickInit];
+              }
+          }] setProgressBlock:^(int64_t bytesUploaded, int64_t totalBytesUploaded, int64_t totalBytesExpectedToUploaded) {
+              hud.progress = totalBytesUploaded / totalBytesExpectedToUploaded ;
+              NSLog(@"\n%lld\n%lld\n%lld\n", bytesUploaded, totalBytesUploaded, totalBytesExpectedToUploaded);
+          }];
+        
     }
     
     
 }
 
-
-- (void)restClient:(DBRestClient*)client uploadProgress:(CGFloat)progress
-           forFile:(NSString*)destPath from:(NSString*)srcPath {
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        NSLog(@"p:%f",progress);
-        hud.progress = progress;
-    });
-//    dispatch_async(dispatch_get_main_queue(), ^{
-////    NSLog(@"%.2f",progress);
-//        hud.progress = progress;
-//    });
-}
 - (void)Camerainit {
     
     imagePicker = [[UIImagePickerController alloc] init];
@@ -184,7 +241,7 @@ NSInteger count;
     NSString *strDate = [dateFormatter stringFromDate:[NSDate date]];
     userDefault = [NSUserDefaults standardUserDefaults];
     if (![userDefault boolForKey:strDate]) {
-        [self.restClient createFolder:[NSString stringWithFormat:@"/%@",strDate]];
+        [self.client.filesRoutes createFolderV2:[NSString stringWithFormat:@"/%@",strDate]];
         [userDefault setBool:YES forKey:strDate];
         [userDefault synchronize];
     }
@@ -206,57 +263,56 @@ NSInteger count;
     hud.labelText = [NSString stringWithFormat:@"上傳中:%@.jpg",currentFilename];
     [hud show:YES];
     [waitFile addObject:[NSString stringWithFormat:@"%@.jpg",currentFilename]];
-    [self.restClient uploadFile:[NSString stringWithFormat:@"%@.jpg",currentFilename] toPath:destDir withParentRev:nil fromPath:filePath];
-//    [picker dismissViewControllerAnimated:NO completion:nil];
 
     
-}
-- (void)restClient:(DBRestClient *)client uploadedFile:(NSString *)destPath
-              from:(NSString *)srcPath metadata:(DBMetadata *)metadata {
-    NSLog(@"File uploaded successfully to path: %@", metadata.path);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        hud.labelText = @"上傳成功！";
-        [hud hide:YES afterDelay:1];
-        [waitFile removeObject:metadata.filename];
-        count += 1;
-        if (count == lock) {
-            userDefault = [NSUserDefaults standardUserDefaults];
-            [userDefault setObject:waitFile forKey:@"waitFiles"];
-            [userDefault synchronize];
-        }
-    });
-    self.CameraBut.enabled = YES;
-    [self datePickInit];
+    // For overriding on upload
+    DBFILESWriteMode *mode = [[DBFILESWriteMode alloc] initWithOverwrite];
+    
+    [[[self.client.filesRoutes uploadData:[NSString stringWithFormat:@"%@/%@.jpg",destDir,currentFilename]
+                                mode:mode
+                          autorename:@(YES)
+                      clientModified:nil
+                                mute:@(NO)
+                           inputData:myResizedData]
+      setResponseBlock:^(DBFILESFileMetadata *result, DBFILESUploadError *routeError, DBRequestError *networkError) {
+          if (result) {
+              NSLog(@"%@\n", result);
+              
+              hud.labelText = @"上傳成功！";
+              [hud hide:YES afterDelay:1];
+              [waitFile removeObject:result.name];
+              count += 1;
+              if (count == lock) {
+                  userDefault = [NSUserDefaults standardUserDefaults];
+                  [userDefault setObject:waitFile forKey:@"waitFiles"];
+                  [userDefault synchronize];
+              }
+              
+              self.CameraBut.enabled = YES;
+              [self datePickInit];
+              
+          } else {
+              NSLog(@"%@\n%@\n", routeError, networkError);
+              
+              hud.labelText = @"上傳失敗！";
+              [hud hide:YES afterDelay:2];
+              
+              userDefault = [NSUserDefaults standardUserDefaults];
+              [userDefault setObject:waitFile forKey:@"waitFiles"];
+              [userDefault synchronize];
+              self.CameraBut.enabled = YES;
+              [self datePickInit];
+          }
+      }] setProgressBlock:^(int64_t bytesUploaded, int64_t totalBytesUploaded, int64_t totalBytesExpectedToUploaded) {
+          hud.progress = totalBytesUploaded / totalBytesExpectedToUploaded ;
+          NSLog(@"\n%lld\n%lld\n%lld\n", bytesUploaded, totalBytesUploaded, totalBytesExpectedToUploaded);
+      }];
+    
+    
+    
 }
 
-- (void)restClient:(DBRestClient *)client uploadFileFailedWithError:(NSError *)error {
-    NSLog(@"File upload failed with error: %@", error);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        hud.labelText = @"上傳失敗！";
-        [hud hide:YES afterDelay:2];
-    });
-    userDefault = [NSUserDefaults standardUserDefaults];
-    [userDefault setObject:waitFile forKey:@"waitFiles"];
-    [userDefault synchronize];
-    self.CameraBut.enabled = YES;
-    [self datePickInit];
-}
-// Folder is the metadata for the newly created folder
-- (void)restClient:(DBRestClient*)client createdFolder:(DBMetadata*)folder{
-    NSLog(@"Created Folder Path %@",folder.path);
-    NSLog(@"Created Folder name %@",folder.filename);
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyyMMdd"];
-    NSString *strDate = [dateFormatter stringFromDate:[NSDate date]];
-    userDefault = [NSUserDefaults standardUserDefaults];
-    [userDefault setBool:YES forKey:strDate];
 
-
-}
-// [error userInfo] contains the root and path
-- (void)restClient:(DBRestClient*)client createFolderFailedWithError:(NSError*)error{
-    NSLog(@"%@",error);
-}
 
 - (void)datePickInit
 {
